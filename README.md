@@ -146,9 +146,14 @@ We welcome your contributions! Please read [CONTRIBUTING](CONTRIBUTING.md) for d
 
 ### License
 
-This project is licensed under the [Apache 2.0 License](LICENSE).
+This project is licensed under the [Nelson Grey LLC Community License 1.0](LICENSE).
 
-<br>
+- **Free for individuals, education, and research**: use, modify, and distribute this software for non-commercial purposes
+- **Commercial evaluation**: evaluate the software for a possible commercial use, free of charge
+- **Commercial production use**: requires a commercial license from Nelson Grey LLC
+- **Automatic conversion**: on December 13, 2029, this automatically converts to the Apache License 2.0
+
+For commercial licensing inquiries, contact support@nelsongrey.com.
 
 ### Additional Resources
 
