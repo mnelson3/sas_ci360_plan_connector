@@ -1,5 +1,7 @@
 # SAS CI360 Plan Connector
 
+> **Status: canonical.** The reference connector pattern for CI360's Plan connector framework — no duplicate implementation exists.
+
 An Azure Functions connector that lets [SAS Customer Intelligence 360](https://www.sas.com/en_us/software/customer-intelligence-360.html) (CI360) manage offers in a third-party offer/coupon platform through CI360's connector framework.
 
 <br>
