@@ -135,3 +135,13 @@ local.settings.json
 
 # macOS
 .DS_Store
+
+# core/ is copied into each cloud adapter at build time (see */build.sh);
+# connector/core/ itself is the tracked source, these copies are not.
+connector/azure/core/
+connector/aws/core/
+connector/gcp/core/
+
+# Real per-adapter secrets/config; only the *.example templates are tracked.
+connector/aws/env.json
+connector/gcp/.env.yaml

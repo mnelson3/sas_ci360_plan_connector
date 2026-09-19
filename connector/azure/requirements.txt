@@ -5,6 +5,4 @@
 azure-functions
 azure-identity
 azure-keyvault-secrets
-azure-cosmos
 urllib3>=2.5.0
-DateTime~=4.3

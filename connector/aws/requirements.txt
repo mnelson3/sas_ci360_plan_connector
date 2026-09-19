@@ -1,0 +1,4 @@
+# boto3 ships with the Lambda Python runtime; declared here only so local
+# testing (sam local) and unit tests have it available.
+boto3>=1.34.0
+urllib3>=2.5.0

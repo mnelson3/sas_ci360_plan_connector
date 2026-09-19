@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAS CI360 Plan connector - AWS adapter. Mirrors connector/azure's five
+  offer-CRUD routes; the actual integration logic lives in connector/core
+  and is copied into this directory by build.sh before `sam build`.
+
+Parameters:
+  SecretsManagerSecretName:
+    Type: String
+    Description: >
+      Name of the Secrets Manager secret holding the JSON object with the
+      keys listed in core/secrets.py (ci360_connector_url, partner_api_url,
+      etc).
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        SECRETS_MANAGER_SECRET_NAME: !Ref SecretsManagerSecretName
+
+Resources:
+  PlanConnectorApi:
+    Type: AWS::Serverless::HttpApi
+
+  CreateOfferFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: handlers.create_offer
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretsManagerSecretName}*"
+      Events:
+        CreateOffer:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref PlanConnectorApi
+            Path: /offers
+            Method: post
+
+  ReadOffersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: handlers.read_offers
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretsManagerSecretName}*"
+      Events:
+        ReadOffers:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref PlanConnectorApi
+            Path: /offers
+            Method: get
+
+  ReadOfferByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: handlers.read_offer_by_id
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretsManagerSecretName}*"
+      Events:
+        ReadOfferById:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref PlanConnectorApi
+            Path: /offers/{id}
+            Method: get
+
+  UpdateOfferFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: handlers.update_offer
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretsManagerSecretName}*"
+      Events:
+        UpdateOffer:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref PlanConnectorApi
+            Path: /offers/{id}
+            Method: put
+
+  DeleteOfferFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: handlers.delete_offer
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SecretsManagerSecretName}*"
+      Events:
+        DeleteOffer:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref PlanConnectorApi
+            Path: /offers/{id}
+            Method: delete
+
+Outputs:
+  ApiEndpoint:
+    Description: Base URL for the Plan connector HTTP API
+    Value: !Sub "https://${PlanConnectorApi}.execute-api.${AWS::Region}.amazonaws.com"
