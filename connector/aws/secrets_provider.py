@@ -9,6 +9,7 @@ Set SECRETS_MANAGER_SECRET_NAME as a Lambda environment variable.
 import json
 import logging
 import os
+from typing import Optional
 
 import boto3
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class AWSSecretsManagerSecretProvider:
-    def __init__(self, secret_name: str = None, region_name: str = None):
+    def __init__(self, secret_name: Optional[str] = None, region_name: Optional[str] = None):
         self.secret_name = secret_name or os.environ["SECRETS_MANAGER_SECRET_NAME"]
         self.region_name = region_name or os.environ.get("AWS_REGION")
 

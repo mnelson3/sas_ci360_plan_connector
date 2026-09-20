@@ -29,17 +29,23 @@ jobs:
     - name: Lint with flake8
       run: |
         pip install flake8
-        flake8 connector/core connector/tests --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 connector/core connector/tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 connector/core connector/azure connector/aws connector/gcp connector/tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 connector/core connector/azure connector/aws connector/gcp connector/tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Type check with mypy
       run: |
         pip install mypy types-requests
         mypy connector/core --ignore-missing-imports
+        # Each cloud adapter is checked separately: azure/, aws/, and gcp/
+        # each ship their own secrets_provider.py, and mypy treats same-named
+        # modules under different roots as a collision if checked together.
+        mypy connector/azure --ignore-missing-imports
+        mypy connector/aws --ignore-missing-imports
+        mypy connector/gcp --ignore-missing-imports
 
     - name: Run tests
       run: |
-        pytest connector/tests/ --cov=connector/core --cov-report=xml
+        pytest connector/tests/ --cov=connector/core --cov=connector/azure --cov=connector/aws --cov=connector/gcp --cov-report=xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

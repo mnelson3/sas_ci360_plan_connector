@@ -3,6 +3,7 @@
 
 import logging
 import os
+from typing import Optional
 
 from azure.core.exceptions import ResourceNotFoundError
 from azure.identity import DefaultAzureCredential
@@ -24,7 +25,7 @@ SECRET_NAME_MAP = {
 
 
 class AzureKeyVaultSecretProvider:
-    def __init__(self, vault_name: str = None):
+    def __init__(self, vault_name: Optional[str] = None):
         self.vault_name = vault_name or os.environ["AZURE_KEY_VAULT_NAME"]
         self.vault_uri = "https://{0}.vault.azure.net/".format(self.vault_name)
 

@@ -77,6 +77,20 @@ def test_create_offer_transforms_the_payload_before_posting(mock_http, offer_pay
 
 
 @patch("core.offers._http")
+def test_update_offer_transforms_the_payload_and_puts_to_the_id_path(mock_http, offer_payload_factory):
+    mock_http.request.return_value = _mock_response(status=200)
+
+    result = offers.update_offer(SECRETS, "offer-7", offer_payload_factory())
+
+    assert result["status"] == 200
+    signed_url = mock_http.request.call_args.kwargs["url"]
+    assert "/v1/offers/offer-7" in signed_url
+    sent_body = json.loads(mock_http.request.call_args.kwargs["body"])
+    assert sent_body["style"] == "Coupon"
+    assert mock_http.request.call_args.kwargs["method"] == "PUT"
+
+
+@patch("core.offers._http")
 def test_delete_offer_issues_a_delete_with_no_body(mock_http):
     mock_http.request.return_value = _mock_response(status=204, data=b"")
 

@@ -9,6 +9,7 @@ GCP_SECRET_ID as environment variables on each Cloud Function.
 import json
 import logging
 import os
+from typing import Optional
 
 from google.cloud import secretmanager
 
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class GCPSecretManagerSecretProvider:
-    def __init__(self, project_id: str = None, secret_id: str = None, version: str = "latest"):
+    def __init__(self, project_id: Optional[str] = None, secret_id: Optional[str] = None, version: str = "latest"):
         self.project_id = project_id or os.environ["GCP_PROJECT_ID"]
         self.secret_id = secret_id or os.environ["GCP_SECRET_ID"]
         self.version = version
