@@ -11,6 +11,7 @@ cloud SDK.
 
 import logging
 import time
+from typing import Optional
 
 import urllib3
 
@@ -31,7 +32,7 @@ def _build_signed_url(secrets: dict, path: str) -> str:
     return "{0}&authSignature={1}".format(base_url, signature)
 
 
-def _call(method: str, signed_url: str, body: str = None) -> dict:
+def _call(method: str, signed_url: str, body: Optional[str] = None) -> dict:
     logger.info("%s %s", method, signed_url)
     headers = {"Content-Type": "application/json"}
     if body is None:
