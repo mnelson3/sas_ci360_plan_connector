@@ -20,10 +20,10 @@ CI360's Plan API includes a connector framework for third-party rewards/coupon p
 
 | ID | Objective | Primary metric |
 | --- | --- | --- |
-| BG-1 | Demonstrate the full CRUD round trip against CI360's connector framework, deployable unchanged to 3 cloud targets. | 1 reference connector, 3 cloud targets |
-| BG-2 | Keep the integration logic (`core`) free of any cloud SDK import, so adding or dropping a cloud target never touches it. | 0 cloud-SDK imports in `core/` |
-| BG-3 | Every operation — `core` and every cloud adapter — verifiable without a live cloud account or live CI360 tenant. | 100% line coverage, `core` + all 3 adapters (achieved 2026-09-20) |
-| BG-4 | Never store a third-party API credential in source control. | Every secret resolved from that cloud's own secret store at runtime |
+| PLANCONNECTOR-BG-1 | Demonstrate the full CRUD round trip against CI360's connector framework, deployable unchanged to 3 cloud targets. | 1 reference connector, 3 cloud targets |
+| PLANCONNECTOR-BG-2 | Keep the integration logic (`core`) free of any cloud SDK import, so adding or dropping a cloud target never touches it. | 0 cloud-SDK imports in `core/` |
+| PLANCONNECTOR-BG-3 | Every operation — `core` and every cloud adapter — verifiable without a live cloud account or live CI360 tenant. | 100% line coverage, `core` + all 3 adapters (achieved 2026-09-20) |
+| PLANCONNECTOR-BG-4 | Never store a third-party API credential in source control. | Every secret resolved from that cloud's own secret store at runtime |
 
 ## 4. Stakeholders
 
@@ -44,10 +44,10 @@ Offer create/read (single + list)/update/delete; HMAC-SHA256 request signing; CI
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| BR-1 | `core/` must not import any cloud SDK. | P1 |
-| BR-2 | No third-party API credential may appear in source control, `local.settings.json`, `env.json`, or `.env.yaml` — all are git-ignored, with `.example` templates committed instead. | P1 |
-| BR-3 | Every cloud adapter must expose the same five operations, even where each platform's own request-routing conventions differ (Azure/AWS use path segments for the by-id operations, GCP uses a query parameter). | P2 |
-| BR-4 | Adding a fourth cloud target must mean writing one more adapter, not modifying `core`. | P2 |
+| PLANCONNECTOR-BR-1 | `core/` must not import any cloud SDK. | P1 |
+| PLANCONNECTOR-BR-2 | No third-party API credential may appear in source control, `local.settings.json`, `env.json`, or `.env.yaml` — all are git-ignored, with `.example` templates committed instead. | P1 |
+| PLANCONNECTOR-BR-3 | Every cloud adapter must expose the same five operations, even where each platform's own request-routing conventions differ (Azure/AWS use path segments for the by-id operations, GCP uses a query parameter). | P2 |
+| PLANCONNECTOR-BR-4 | Adding a fourth cloud target must mean writing one more adapter, not modifying `core`. | P2 |
 
 ## 7. Success metrics
 

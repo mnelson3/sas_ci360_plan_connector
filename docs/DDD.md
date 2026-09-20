@@ -68,7 +68,7 @@ Checking each adapter's types for the first time (as part of adding this test co
 def __init__(self, vault_name: str = None):   # implicit Optional under PEP 484
 ```
 
-mypy's modern default (`no_implicit_optional=True`) correctly flags this — `str = None` isn't a valid default for a parameter typed `str`. Fixed by widening to `Optional[str]` in all three files. This required checking each cloud's `secrets_provider.py` in its own mypy invocation (see TRD.md NFR-4) — checking `connector/azure` and `connector/aws` together produces a `Duplicate module named "secrets_provider"` error, the same bare-module-name collision the test-loading approach above was built to avoid.
+mypy's modern default (`no_implicit_optional=True`) correctly flags this — `str = None` isn't a valid default for a parameter typed `str`. Fixed by widening to `Optional[str]` in all three files. This required checking each cloud's `secrets_provider.py` in its own mypy invocation (see TRD.md PLANCONNECTOR-NFR-4) — checking `connector/azure` and `connector/aws` together produces a `Duplicate module named "secrets_provider"` error, the same bare-module-name collision the test-loading approach above was built to avoid.
 
 ## Testing design
 
@@ -76,4 +76,4 @@ mypy's modern default (`no_implicit_optional=True`) correctly flags this — `st
 
 ## CI/CD pipeline
 
-flake8 (hard gate + advisory) runs across `connector/core`, `connector/azure`, `connector/aws`, `connector/gcp`, and `connector/tests`. mypy runs `connector/core` then each cloud separately (see TRD.md NFR-4). pytest runs the whole `connector/tests/` directory in one pass.
+flake8 (hard gate + advisory) runs across `connector/core`, `connector/azure`, `connector/aws`, `connector/gcp`, and `connector/tests`. mypy runs `connector/core` then each cloud separately (see TRD.md PLANCONNECTOR-NFR-4). pytest runs the whole `connector/tests/` directory in one pass.
