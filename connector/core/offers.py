@@ -12,7 +12,6 @@ cloud SDK.
 import logging
 import time
 from typing import Optional
-from urllib.parse import urlsplit
 
 import urllib3
 
@@ -33,11 +32,15 @@ def _build_signed_url(secrets: dict, path: str) -> str:
     return "{0}&authSignature={1}".format(base_url, signature)
 
 
-def _call(method: str, signed_url: str, body: Optional[str] = None) -> dict:
-    # signed_url's query string carries partner_api_identifier and the
-    # request's own authSignature - log the path only, not the credential
-    # or the valid-until-timestamp-mismatch signature that goes with it.
-    logger.info("%s %s", method, urlsplit(signed_url).path)
+def _call(method: str, signed_url: str, path: str, body: Optional[str] = None) -> dict:
+    # Deliberately log `path` (the caller's own, never-secret argument -
+    # "" or "/{offer_id}") rather than anything derived from signed_url,
+    # which carries partner_api_identifier and this request's own
+    # authSignature in its query string. Even extracting just the path
+    # component out of signed_url would still count as touching secret-
+    # tainted data as far as static analysis is concerned - logging a
+    # value with no data-flow from the secret at all avoids that entirely.
+    logger.info("%s /v1/offers%s", method, path)
     headers = {"Content-Type": "application/json"}
     if body is None:
         response = _http.request(method=method, url=signed_url, headers=headers)
@@ -52,31 +55,36 @@ def _call(method: str, signed_url: str, body: Optional[str] = None) -> dict:
 
 def create_offer(secrets: dict, offer_payload: dict) -> dict:
     """POST a new offer, transforming it from CI360's connector format first."""
-    signed_url = _build_signed_url(secrets, "")
+    path = ""
+    signed_url = _build_signed_url(secrets, path)
     body = transform.transform_json(offer_payload)
-    return _call("POST", signed_url, body=body)
+    return _call("POST", signed_url, path, body=body)
 
 
 def read_offers(secrets: dict) -> dict:
     """GET the full list of offers."""
-    signed_url = _build_signed_url(secrets, "")
-    return _call("GET", signed_url)
+    path = ""
+    signed_url = _build_signed_url(secrets, path)
+    return _call("GET", signed_url, path)
 
 
 def read_offer_by_id(secrets: dict, offer_id: str) -> dict:
     """GET a single offer by id."""
-    signed_url = _build_signed_url(secrets, "/{0}".format(offer_id))
-    return _call("GET", signed_url)
+    path = "/{0}".format(offer_id)
+    signed_url = _build_signed_url(secrets, path)
+    return _call("GET", signed_url, path)
 
 
 def update_offer(secrets: dict, offer_id: str, offer_payload: dict) -> dict:
     """PUT an update to an existing offer, transforming it first."""
-    signed_url = _build_signed_url(secrets, "/{0}".format(offer_id))
+    path = "/{0}".format(offer_id)
+    signed_url = _build_signed_url(secrets, path)
     body = transform.transform_json(offer_payload)
-    return _call("PUT", signed_url, body=body)
+    return _call("PUT", signed_url, path, body=body)
 
 
 def delete_offer(secrets: dict, offer_id: str) -> dict:
     """DELETE an existing offer."""
-    signed_url = _build_signed_url(secrets, "/{0}".format(offer_id))
-    return _call("DELETE", signed_url)
+    path = "/{0}".format(offer_id)
+    signed_url = _build_signed_url(secrets, path)
+    return _call("DELETE", signed_url, path)
