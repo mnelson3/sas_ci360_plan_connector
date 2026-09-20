@@ -12,6 +12,7 @@ cloud SDK.
 import logging
 import time
 from typing import Optional
+from urllib.parse import urlsplit
 
 import urllib3
 
@@ -33,7 +34,10 @@ def _build_signed_url(secrets: dict, path: str) -> str:
 
 
 def _call(method: str, signed_url: str, body: Optional[str] = None) -> dict:
-    logger.info("%s %s", method, signed_url)
+    # signed_url's query string carries partner_api_identifier and the
+    # request's own authSignature - log the path only, not the credential
+    # or the valid-until-timestamp-mismatch signature that goes with it.
+    logger.info("%s %s", method, urlsplit(signed_url).path)
     headers = {"Content-Type": "application/json"}
     if body is None:
         response = _http.request(method=method, url=signed_url, headers=headers)
