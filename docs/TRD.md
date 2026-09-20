@@ -18,7 +18,7 @@
 | ID | Requirement | Location |
 | --- | --- | --- |
 | FR-1 | Create/read (single)/read (list)/update/delete an offer, transforming CI360's payload shape to the partner API's. | `core/offers.py`, `core/transform.py` |
-| FR-2 | Sign every outbound request with HMAC-SHA1 over the exact request URL. | `core/signing.py` |
+| FR-2 | Sign every outbound request with HMAC-SHA256 over the exact request URL. | `core/signing.py` |
 | FR-3 | Validate that all 6 required secret keys are present before signing a request. | `core/secrets.py` |
 | FR-4 | Resolve secrets from Azure Key Vault at runtime. | `azure/secrets_provider.py::AzureKeyVaultSecretProvider` |
 | FR-5 | Resolve secrets from AWS Secrets Manager at runtime (one JSON secret holding all 6 keys). | `aws/secrets_provider.py::AWSSecretsManagerSecretProvider` |

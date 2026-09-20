@@ -49,7 +49,7 @@ The integration logic — payload transformation, HMAC signing, and the HTTP cal
 connector/
 ├── core/                       # Cloud-agnostic integration logic — no cloud SDK imports
 │   ├── secrets.py              # SecretProvider contract + REQUIRED_SECRET_KEYS
-│   ├── signing.py              # HMAC-SHA1 request signing
+│   ├── signing.py              # HMAC-SHA256 request signing
 │   ├── transform.py            # CI360 offer payload -> partner API payload
 │   └── offers.py               # create/read/read-by-id/update/delete, each calling the partner API
 │
@@ -92,7 +92,7 @@ Every adapter exposes the same five operations. Azure and AWS take the offer id 
 | Update offer | PUT | `/api/offers?id={id}` | `/offers/{id}` | `/update-offer?id=...` |
 | Delete offer | DELETE | `/api/offers/{id}` | `/offers/{id}` | `/delete-offer?id=...` |
 
-Every request is signed before it's sent to the downstream API: `core.signing.make_digest` builds an HMAC-SHA1 signature over the exact request URL using the partner API's shared secret, and `core.offers` appends it as an `authSignature` query parameter.
+Every request is signed before it's sent to the downstream API: `core.signing.make_digest` builds an HMAC-SHA256 signature over the exact request URL using the partner API's shared secret, and `core.offers` appends it as an `authSignature` query parameter.
 
 <br>
 

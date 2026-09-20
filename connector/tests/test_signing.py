@@ -7,12 +7,12 @@ import hmac
 from core import signing
 
 
-def test_make_digest_matches_reference_hmac_sha1():
+def test_make_digest_matches_reference_hmac_sha256():
     message = "https://partner.example.com/v1/offers?identifier=abc&timestamp=123"
     key = "shared-secret"
 
     expected = hmac.new(
-        bytes(key, "UTF-8"), bytes(message, "UTF-8"), hashlib.sha1
+        bytes(key, "UTF-8"), bytes(message, "UTF-8"), hashlib.sha256
     ).hexdigest()
 
     assert signing.make_digest(message_in=message, key_in=key) == expected

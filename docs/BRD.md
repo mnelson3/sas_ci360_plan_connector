@@ -33,7 +33,7 @@ CI360's Plan API includes a connector framework for third-party rewards/coupon p
 ## 5. Scope
 
 ### In scope
-Offer create/read (single + list)/update/delete; HMAC-SHA1 request signing; CI360-to-partner payload transformation; per-cloud secret resolution (Azure Key Vault, AWS Secrets Manager, GCP Secret Manager); Azure Functions, AWS Lambda (via SAM), and GCP Cloud Functions (2nd gen) adapters.
+Offer create/read (single + list)/update/delete; HMAC-SHA256 request signing; CI360-to-partner payload transformation; per-cloud secret resolution (Azure Key Vault, AWS Secrets Manager, GCP Secret Manager); Azure Functions, AWS Lambda (via SAM), and GCP Cloud Functions (2nd gen) adapters.
 
 ### Out of scope
 - The Plan API client for CI360-side campaign/audience management — that's `sol-planning`, in `sas-ci360-sdk`.
@@ -56,7 +56,7 @@ Offer create/read (single + list)/update/delete; HMAC-SHA1 request signing; CI36
 
 ## 8. Assumptions & constraints
 
-- Assumes the third-party partner platform is reachable over HTTPS and accepts an HMAC-SHA1-signed request — this connector doesn't negotiate a different auth scheme.
+- Assumes the third-party partner platform is reachable over HTTPS and accepts an HMAC-SHA256-signed request — this connector doesn't negotiate a different auth scheme.
 - Each cloud's own hosted-runner CI cost model may differ; this repository's own CI runs on standard GitHub-hosted `ubuntu-latest` runners with no cloud-specific compute, so evaluating a cloud target doesn't incur CI cost by itself.
 
 ## 9. Licensing

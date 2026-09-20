@@ -6,7 +6,7 @@ A practical walkthrough for deploying this connector against your own partner pl
 
 ```
 core/secrets.py    - the 6 required secret keys, validated before any request goes out
-core/signing.py    - HMAC-SHA1 over the exact request URL
+core/signing.py    - HMAC-SHA256 over the exact request URL
 core/transform.py  - CI360's offer payload shape -> the partner API's shape
 core/offers.py     - the 5 CRUD calls, each: build signed URL -> transform (if applicable) -> HTTP call
 ```
