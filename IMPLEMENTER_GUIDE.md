@@ -33,7 +33,7 @@ The README's Getting Started section covers the deploy commands per cloud. After
 2. Write 5 handler entry points (however that platform's function framework expects them) that each: parse the platform's native request, call the matching `core.offers` function, shape the result into that platform's native response.
 3. Don't touch `core/` unless you're fixing something genuinely wrong there — the whole point of this architecture is that a new cloud target never requires it.
 4. Add tests the same way the existing three clouds do: fake that cloud's SDK via `connector/tests/_fakes.py::install_fake_module` (see `docs/DDD.md` §The testing approach), load the handler module via `importlib.util.spec_from_file_location` under a private name if your new adapter's module names could collide with an existing one (they will, if you reuse `secrets_provider.py` as the filename, which is the established convention), and patch `core.offers`'s functions directly to test wiring rather than re-testing `core`'s own logic.
-5. Add a CI job entry: lint, mypy (in its own invocation — see `docs/TRD.md` PLANCONNECTOR-NFR-4 for why), and include your new test files in the `pytest connector/tests/` run (no config needed — pytest picks up any `test_*.py`/`Test*.py` file under that directory automatically).
+5. Add a CI job entry: lint, mypy (in its own invocation — see `docs/TRD.md` `PLANCONNECTOR-NFR-4` for why), and include your new test files in the `pytest connector/tests/` run (no config needed — pytest picks up any `test_*.py`/`Test*.py` file under that directory automatically).
 
 ## 5. Common pitfalls
 
