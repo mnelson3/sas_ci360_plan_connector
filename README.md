@@ -158,14 +158,16 @@ Provision equivalent secrets for each environment you deploy to (sandbox, produc
 
 ### Testing
 
-`connector/core/` has no cloud SDK dependencies, so it's fully unit-testable without a live Azure/AWS/GCP account:
-
 ```
 pip install -r requirements-dev.txt
 pytest connector/tests/
 ```
 
-The suite covers request signing, secret validation, CI360-to-partner payload transformation, and the offer CRUD calls (with the outbound HTTP request mocked). CI runs this suite on every push and pull request against `main`, `staging`, and `develop`.
+`connector/core/` has no cloud SDK dependencies, so it's fully unit-testable without a live Azure/AWS/GCP account — the suite covers request signing, secret validation, CI360-to-partner payload transformation, and the offer CRUD calls (with the outbound HTTP request mocked).
+
+**All three cloud adapters are covered too** (0% before 2026-09-20; each adapter's `secrets_provider.py` and all 5 handler functions are now tested), without needing the real `azure-identity`/`boto3`/`google-cloud-secret-manager`/`azure-functions`/`functions-framework`/`flask` packages installed: fake modules are registered directly in `sys.modules` before the adapter code is imported, so no real cloud SDK is ever required just to run this test suite. See `connector/tests/_fakes.py` and `docs/DDD.md` §Testing design for how.
+
+`connector/core` + all 3 adapters: 100% line coverage, 61 tests, as of 2026-09-20. CI runs this suite, plus flake8 and mypy (each cloud checked separately — see `docs/DDD.md`), on every push and pull request against `main`, `staging`, and `develop`.
 
 <br>
 
