@@ -1,5 +1,7 @@
 # SAS CI360 Plan Connector
 
+[![CI](https://github.com/mnelson3/sas_ci360_plan_connector/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/mnelson3/sas_ci360_plan_connector/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/license-Community%201.0-orange.svg)](https://github.com/mnelson3/sas_ci360_plan_connector/blob/develop/LICENSE)
+
 > **Status: canonical.** The reference connector pattern for CI360's Plan connector framework — no duplicate implementation exists.
 
 A serverless connector that lets [SAS Customer Intelligence 360](https://www.sas.com/en_us/software/customer-intelligence-360.html) (CI360) manage offers in a third-party offer/coupon platform through CI360's connector framework — deployable to **Azure Functions**, **AWS Lambda**, or **Google Cloud Functions** from the same integration logic.
